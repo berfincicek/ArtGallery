@@ -1,2 +1,2 @@
 # artGallery
-cmpe360 assignemtn10
+CMPE360 Assignment10
