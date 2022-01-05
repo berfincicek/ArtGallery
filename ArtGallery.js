@@ -1,5 +1,5 @@
 //-------------------------------------------------
-// Title: art_gallery.js
+// Title: ArtGallery.js
 // Author: Berfin Çiçek
 //         Çağla Su Keşan
 // ID: TODO
@@ -8,7 +8,7 @@
 // Description: js file of the art gallery implemented by three.js
 //-------------------------------------------------
 
-let scene, camera, renderer, cube, sphere, dodecahedron, skyboxGeo;
+let scene, camera, renderer, cube, sphere, dodecahedron, skyboxGeo, materialArray;
 
     function init(){
 
@@ -25,33 +25,45 @@ let scene, camera, renderer, cube, sphere, dodecahedron, skyboxGeo;
         renderer.domElement.id = "canvas";
         document.body.appendChild( renderer.domElement );
 
-        addSkybox();
 
-        const ft = new THREE.TextureLoader().load("negx.jpg");
-        const bk = new THREE.TextureLoader().load("negy.jpg");
-        const up = new THREE.TextureLoader().load("negz.jpg");
-        const dn = new THREE.TextureLoader().load("posx.jpg");
-        const rt = new THREE.TextureLoader().load("posy.jpg");
-        const lf = new THREE.TextureLoader().load("posz.jpg");
+        const ft = "negx.jpg";
+        const bk = "negy.jpg";
+        const up = "negz.jpg";
+        const dn = "posx.jpg";
+        const rt = "posy.jpg";
+        const lf = "posz.jpg";
+
+        const image_array=[ft,bk,up,dn,rt,lf];
+
+        materialArray = createMaterialArray(image_array);
+
+        addSkybox();
 
         //addCube();
         //addSphere();
         //addDodecahedron();
 
-        //camera.position.z = 5;
-
         animate();
     }
 
+    function createMaterialArray(images) {
+      const materialArray = images.map(image => {
+        let texture = new THREE.TextureLoader().load(image);
+
+        return new THREE.MeshBasicMaterial({ map: texture, side: THREE.BackSide }); // <---
+      });
+      return materialArray;
+    }
+
     function addSkybox(){
-        skyboxGeo = new THREE.BoxGeometry(3,3,3);
-        skybox = new THREE.Mesh(skyboxGeo);
+        skyboxGeo = new THREE.BoxGeometry(1000,1000,1000);
+        skybox = new THREE.Mesh(skyboxGeo, materialArray);
         scene.add(skybox);
     }
 
     function animateSkybox(){
-        skybox.rotation.x += 0.005;
-        skybox.rotation.y += 0.005;
+        skybox.rotation.x += 0.001;
+        skybox.rotation.y += 0.001;
     }
 
     function addCube(){
