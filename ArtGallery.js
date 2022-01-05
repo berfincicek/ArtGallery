@@ -41,12 +41,12 @@ let scene, camera, renderer, cube, sphere, dodecahedron, skyboxGeo, materialArra
         //const rt = "posy.jpg";
         //const lf = "posz.jpg";
 
-        const ft = "corona_bk.png";
-        const bk = "corona_dn.png";
-        const up = "corona_ft.png";
-        const dn = "corona_lf.png";
+        const ft = "corona_ft.png";
+        const bk = "corona_bk.png";
+        const up = "corona_up.png";
+        const dn = "corona_dn.png";
         const rt = "corona_rt.png";
-        const lf = "corona_up.png";
+        const lf = "corona_lf.png";
 
         const image_array=[ft,bk,up,dn,rt,lf];
 
