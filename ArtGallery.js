@@ -12,9 +12,9 @@ let scene, camera, renderer, cube, sphere, dodecahedron, skyboxGeo, materialArra
 
     function init()
     //-------------------------------------------------
-    // Summary:
-    // Precondition:
-    // Post-condition:
+    // Summary: initializes the scene, camera and adds objects
+    // Precondition: -
+    // Post-condition: the scene is set
     //-------------------------------------------------
     {
 
@@ -52,7 +52,6 @@ let scene, camera, renderer, cube, sphere, dodecahedron, skyboxGeo, materialArra
         const image_array=[ft,bk,up,dn,rt,lf];
 
         materialArray = createMaterialArray(image_array);
-
         addSkybox();
 
         addCube();
@@ -68,6 +67,11 @@ let scene, camera, renderer, cube, sphere, dodecahedron, skyboxGeo, materialArra
         animate();
     }
 
+    //-------------------------------------------------
+    // Summary: loads blender objects
+    // Precondition: filename and the positions of the obj
+    // Post-condition: object is added to the scene
+    //-------------------------------------------------
     function loadGLTF(fileName, x,y,z){
         loader = new THREE.GLTFLoader();
         loader.load(fileName, (gltf) => {
@@ -82,7 +86,11 @@ let scene, camera, renderer, cube, sphere, dodecahedron, skyboxGeo, materialArra
 
     }
 
-
+    //-------------------------------------------------
+    // Summary: creates material array from the skybox object
+    // Precondition: takes the image locations
+    // Post-condition: material array is created
+    //-------------------------------------------------
     function createMaterialArray(images) {
       const materialArray = images.map(image => {
         let texture = new THREE.TextureLoader().load(image);
@@ -91,17 +99,32 @@ let scene, camera, renderer, cube, sphere, dodecahedron, skyboxGeo, materialArra
       return materialArray;
     }
 
+    //-------------------------------------------------
+    // Summary: adds skybox
+    // Precondition: -
+    // Post-condition: a box geometry is added with skybıx images
+    //-------------------------------------------------
     function addSkybox() {
         skyboxGeo = new THREE.BoxGeometry(1000,1000,1000);
         skybox = new THREE.Mesh(skyboxGeo, materialArray);
         scene.add(skybox);
     }
 
+    //-------------------------------------------------
+    // Summary: animates skybox
+    // Precondition: -
+    // Post-condition: animates skybox with 0.0001 rotation
+    //-------------------------------------------------
     function animateSkybox() {
         skybox.rotation.x += 0.0001;
         skybox.rotation.y += 0.0001;
     }
 
+    //-------------------------------------------------
+    // Summary: adds cube
+    // Precondition: -
+    // Post-condition: cube is added to the scene
+    //-------------------------------------------------
     function addCube() {
         const geometry = new THREE.BoxGeometry();
         //const material = new THREE.MeshBasicMaterial( { color: 0xC27BA0 } );
@@ -112,11 +135,21 @@ let scene, camera, renderer, cube, sphere, dodecahedron, skyboxGeo, materialArra
         scene.add( cube );
     }
 
+    //-------------------------------------------------
+    // Summary: animates cube
+    // Precondition: -
+    // Post-condition: animates cube with 0.1 rotation
+    //-------------------------------------------------
     function animateCube() {
         cube.rotation.x += 0.01;
         cube.rotation.y += 0.01;
     }
 
+    //-------------------------------------------------
+    // Summary: adds sphere
+    // Precondition: -
+    // Post-condition: sphere is added
+    //-------------------------------------------------
     function addSphere() {
         const geometry = new THREE.SphereGeometry();
         const material = new THREE.MeshNormalMaterial({shading : THREE.FlatShading}); //every side has different colors
@@ -127,11 +160,21 @@ let scene, camera, renderer, cube, sphere, dodecahedron, skyboxGeo, materialArra
         scene.add(sphere);
     }
 
+    //-------------------------------------------------
+    // Summary: rotates sphere
+    // Precondition: -
+    // Post-condition: sphere rotates with 0.01
+    //-------------------------------------------------
     function animateSphere() {
         sphere.rotation.x += 0.01;
         sphere.rotation.y += 0.01;
     }
 
+    //-------------------------------------------------
+    // Summary: adds Dodecahedron
+    // Precondition: -
+    // Post-condition: Dodecahedron is added
+    //-------------------------------------------------
     function addDodecahedron() {
         const radius = 1;
         const geometry = new THREE.DodecahedronGeometry(radius);
@@ -142,11 +185,21 @@ let scene, camera, renderer, cube, sphere, dodecahedron, skyboxGeo, materialArra
         scene.add(dodecahedron);
     }
 
+    //-------------------------------------------------
+    // Summary: rotates Dodecahedron
+    // Precondition: -
+    // Post-condition: rotated with 0.01
+    //-------------------------------------------------
     function animateDodecahedron() {
         dodecahedron.rotation.x += 0.01;
         dodecahedron.rotation.y += 0.01;
     }
 
+    //-------------------------------------------------
+    // Summary: adds ring
+    // Precondition: -
+    // Post-condition: ring is added
+    //-------------------------------------------------
     function addRing(){
         const geometry = new THREE.RingGeometry( 1, 5, 32 );
         const material = new THREE.MeshBasicMaterial( { color: 0xffff00, side: THREE.DoubleSide } );
@@ -157,6 +210,11 @@ let scene, camera, renderer, cube, sphere, dodecahedron, skyboxGeo, materialArra
         scene.add( mesh );
     }
 
+    //-------------------------------------------------
+    // Summary: animates the scene
+    // Precondition: -
+    // Post-condition: all animated objs are animated
+    //-------------------------------------------------
     function animate() {
         animateCube();
         animateSphere();
