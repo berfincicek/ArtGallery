@@ -7,17 +7,25 @@
 // Assignment: 10
 // Description: js file of the art gallery implemented by three.js
 //-------------------------------------------------
+//import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+let scene, camera, renderer, cube, sphere, dodecahedron, skyboxGeo, materialArray, controls, loader;
 
-let scene, camera, renderer, cube, sphere, dodecahedron, skyboxGeo, materialArray, controls;
-
-    function init() {
+    function init()
+    //-------------------------------------------------
+    // Summary:
+    // Precondition:
+    // Post-condition:
+    //-------------------------------------------------
+    {
 
         scene = new THREE.Scene();
         scene.background = new THREE.Color( 0xbdc3c7 );
 
-        //light don't make any changes on the rendered result, thus commented out
-        const directionalLight = new THREE.AmbientLight( 0xFF00FF );
-        scene.add( directionalLight );
+        let light = new THREE.DirectionalLight(0xffffff, 0.5);
+        scene.add(light);
+
+        let light2 = new THREE.AmbientLight(0xffffff); // soft white light
+        scene.add(light2);
 
         //camera = new THREE.PerspectiveCamera( 55, window.innerWidth / window.innerHeight, 45, 3000 );
         camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 0.1, 1000 );
@@ -33,13 +41,6 @@ let scene, camera, renderer, cube, sphere, dodecahedron, skyboxGeo, materialArra
         controls = new THREE.OrbitControls( camera, renderer.domElement );
         //camera.position.set( 0, 20, 100 );
         controls.update();
-
-        //const ft = "negx.jpg";
-        //const bk = "negy.jpg";
-        //const up = "negz.jpg";
-        //const dn = "posx.jpg";
-        //const rt = "posy.jpg";
-        //const lf = "posz.jpg";
 
         const ft = "corona_ft.png";
         const bk = "corona_bk.png";
@@ -57,14 +58,34 @@ let scene, camera, renderer, cube, sphere, dodecahedron, skyboxGeo, materialArra
         addCube();
         addSphere();
         addDodecahedron();
+        addRing();
+
+        loadGLTF('./models/object1.gltf',-3,1.2,-20);
+        loadGLTF('./models/object2canvas.gltf',3,2.4,-3);
+        loadGLTF('./models/object3.gltf',-6,2,-2);
+        loadGLTF('./models/object4.gltf',7,2,-2);
 
         animate();
     }
 
+    function loadGLTF(fileName, x,y,z){
+        loader = new THREE.GLTFLoader();
+        loader.load(fileName, (gltf) => {
+            Mesh = gltf.scene;
+            //Mesh.scale.set(0.2,0.2,0.2);
+            scene.add(Mesh);
+            Mesh.position.x = x;
+            Mesh.position.y = y;
+            Mesh.position.z = z;
+            Mesh.material = texture;
+        });
+
+    }
+
+
     function createMaterialArray(images) {
       const materialArray = images.map(image => {
         let texture = new THREE.TextureLoader().load(image);
-
         return new THREE.MeshBasicMaterial({ map: texture, side: THREE.BackSide }); // <---
       });
       return materialArray;
@@ -77,8 +98,8 @@ let scene, camera, renderer, cube, sphere, dodecahedron, skyboxGeo, materialArra
     }
 
     function animateSkybox() {
-        skybox.rotation.x += 0.001;
-        skybox.rotation.y += 0.001;
+        skybox.rotation.x += 0.0001;
+        skybox.rotation.y += 0.0001;
     }
 
     function addCube() {
@@ -86,7 +107,8 @@ let scene, camera, renderer, cube, sphere, dodecahedron, skyboxGeo, materialArra
         //const material = new THREE.MeshBasicMaterial( { color: 0xC27BA0 } );
         const material = new THREE.MeshNormalMaterial({shading : THREE.FlatShading}); //every side has different colors
         cube = new THREE.Mesh( geometry, material );
-        cube.position.z=-3;
+        cube.position.y=-1.2;
+        cube.position.z=-16;
         scene.add( cube );
     }
 
@@ -99,8 +121,9 @@ let scene, camera, renderer, cube, sphere, dodecahedron, skyboxGeo, materialArra
         const geometry = new THREE.SphereGeometry();
         const material = new THREE.MeshNormalMaterial({shading : THREE.FlatShading}); //every side has different colors
         sphere = new THREE.Mesh( geometry, material );
-        sphere.position.x=-2;
-        sphere.position.z=-3;
+        //sphere.position.x=-2;
+        sphere.position.z=-16;
+        sphere.position.y=1.9;
         scene.add(sphere);
     }
 
@@ -114,14 +137,24 @@ let scene, camera, renderer, cube, sphere, dodecahedron, skyboxGeo, materialArra
         const geometry = new THREE.DodecahedronGeometry(radius);
         const material = new THREE.MeshNormalMaterial({shading : THREE.FlatShading}); //every side has different colors
         dodecahedron = new THREE.Mesh( geometry, material );
-        dodecahedron.position.x=2;
-        dodecahedron.position.z=-3;
+        //dodecahedron.position.x=2;
+        dodecahedron.position.z=-16;
         scene.add(dodecahedron);
     }
 
     function animateDodecahedron() {
         dodecahedron.rotation.x += 0.01;
         dodecahedron.rotation.y += 0.01;
+    }
+
+    function addRing(){
+        const geometry = new THREE.RingGeometry( 1, 5, 32 );
+        const material = new THREE.MeshBasicMaterial( { color: 0xffff00, side: THREE.DoubleSide } );
+        const mesh = new THREE.Mesh( geometry, material );
+        mesh.position.z=-90;
+        mesh.position.x=15;
+
+        scene.add( mesh );
     }
 
     function animate() {
